@@ -52,11 +52,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\navarre.luce\Documents\GitHub\GraphsWithGL\NLuceGameEngine;C:\Users\navarre.luce\Documents\GitHub\GraphsWithGL\Debug;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\NLuceGameEngine;.\NLuceGameEngine\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>.\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -87,6 +89,12 @@
     <ClCompile Include="GraphNode.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="VectorStuff.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="Debug\NLuceGameEngine.lib" />
+    <Library Include="NLuceGameEngine\libs\glew32s.lib" />
+    <Library Include="NLuceGameEngine\libs\glfw3dll.lib" />
+    <Library Include="NLuceGameEngine\libs\SOIL.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
