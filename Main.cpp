@@ -11,6 +11,7 @@
 #include "Text.h"
 #include "Sprite.h"
 #include "Shape.h"
+#include "Game.h"
 
 
 using namespace std;
@@ -36,7 +37,6 @@ void CheckLinks(Graph graph)
 
 	GraphNode * start = graph.nodes[startNodeNumber];
 	GraphNode * end = graph.nodes[endNodeNumber];
-
 	if (graph.SearchDFS(start, end)){
 		int links = graph.HowManyLinksBetween(start, end);
 		cout << "There are " << links << " link(s) between those nodes" << endl;
@@ -135,7 +135,10 @@ int main(int argc, char ** argv)
 
 	while (!glfwWindowShouldClose(window))
 	{
+		theGame.startFrame();
+		{
 
+		}
 	}
 
 
