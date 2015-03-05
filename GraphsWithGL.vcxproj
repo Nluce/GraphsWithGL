@@ -82,6 +82,7 @@
     <ClInclude Include="Edge.h" />
     <ClInclude Include="Graph.h" />
     <ClInclude Include="GraphNode.h" />
+    <ClInclude Include="NodeCity.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Edge.cpp" />
@@ -95,6 +96,14 @@
     <Library Include="NLuceGameEngine\libs\glew32s.lib" />
     <Library Include="NLuceGameEngine\libs\glfw3dll.lib" />
     <Library Include="NLuceGameEngine\libs\SOIL.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\FlatFragmentShader.glsl" />
+    <None Include="Shaders\FlatVertexShader.glsl" />
+    <None Include="Shaders\FragmentPositionUV.glsl" />
+    <None Include="Shaders\TexturedFragmentShader.glsl" />
+    <None Include="Shaders\VertexPositionColorUV.glsl" />
+    <None Include="Shaders\VertexPositionUV.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

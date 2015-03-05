@@ -6,7 +6,7 @@ class Graph
 	typedef std::vector<GraphNode*> NodeList;
 public:
 	Graph();
-	Graph(unsigned int a_uiNodeCount)
+	Graph(int a_uiNodeCount)
 	{
 		for (int i = 0; i < a_uiNodeCount; i++){
 			GraphNode* node = new GraphNode(i);

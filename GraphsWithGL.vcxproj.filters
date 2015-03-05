@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Edge.cpp" />
+    <ClCompile Include="Graph.cpp" />
+    <ClCompile Include="GraphNode.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="VectorStuff.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Edge.h" />
+    <ClInclude Include="Graph.h" />
+    <ClInclude Include="GraphNode.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="Debug\NLuceGameEngine.lib" />
+    <Library Include="NLuceGameEngine\libs\glew32s.lib" />
+    <Library Include="NLuceGameEngine\libs\glfw3dll.lib" />
+    <Library Include="NLuceGameEngine\libs\SOIL.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{23ab8139-1120-4079-859c-a6a5e2e4dbcc}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\FlatFragmentShader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\FlatVertexShader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\FragmentPositionUV.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\TexturedFragmentShader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\VertexPositionColorUV.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\VertexPositionUV.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+  </ItemGroup>
+</Project>

@@ -13,6 +13,7 @@
 #include "Shape.h"
 #include "Game.h"
 
+#include "NodeCity.h"
 
 using namespace std;
 GLuint CreateProgram(const char *a_vertex, const char *a_frag);
@@ -88,27 +89,32 @@ void UserGuidedWalk(Graph graph)
 
 int main(int argc, char ** argv)
 {
+	//Initialise GLFW
+	if (!glfwInit())
+	{
+		return -1;
+	}
 
 	GLFWwindow* window;
 	window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Hello World", NULL, NULL);
 	if (!window)
 	{
 		glfwTerminate();
-		return -1;
+		return -2;
 	}
 	glfwMakeContextCurrent(window);
 	if (glewInit() != GLEW_OK)
 	{
 		// OpenGL didn't start-up! shutdown GLFW and return an error code
 		glfwTerminate();
-		return -1;
+		return -3;
 	}
-	Text font = Text("../NLuceGameEngine/fonts/font.png");
 
+	Text font = Text("NLuceGameEngine/fonts/font.png");
 
 	//create shader program
 	//	GLuint uiProgramFlat = CreateProgram("VertexPositionColorUV.glsl.glsl", "FlatFragmentShader.glsl");
-	GLuint uiProgramColorTexture = CreateProgram("VertexPositionColorUV.glsl", "TexturedFragmentShader.glsl");
+	GLuint uiProgramColorTexture = CreateProgram("Shaders/VertexPositionColorUV.glsl", "Shaders/TexturedFragmentShader.glsl");
 	//	GLuint uiProgramTexture = CreateProgram("VertexPositionUV.glsl", "FragmentPositionUV.glsl");
 
 	//find the position of the matrix variable in the shader so we can send info there later
@@ -129,7 +135,7 @@ int main(int argc, char ** argv)
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-
+	NodeCity city;
 
 	/*    GAME LOOP      */
 
@@ -137,9 +143,18 @@ int main(int argc, char ** argv)
 	{
 		theGame.startFrame();
 		{
+			glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+			glClear(GL_COLOR_BUFFER_BIT);
 
+			glfwSwapBuffers(window);
 		}
+
+		//poll for and process events
+		glfwPollEvents();
 	}
+
+	glfwTerminate();
+	return 0;
 
 
 	int graphSize;
