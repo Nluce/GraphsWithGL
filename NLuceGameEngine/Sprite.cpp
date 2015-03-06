@@ -1,7 +1,8 @@
 #include "Sprite.h"
 
 
-Sprite::Sprite()
+Sprite::Sprite() :
+	rotation(0)
 {
 }
 

@@ -87,6 +87,8 @@ void UserGuidedWalk(Graph graph)
 
 }
 
+
+
 int main(int argc, char ** argv)
 {
 	//Initialise GLFW
@@ -102,6 +104,8 @@ int main(int argc, char ** argv)
 		glfwTerminate();
 		return -2;
 	}
+
+
 	glfwMakeContextCurrent(window);
 	if (glewInit() != GLEW_OK)
 	{
@@ -135,7 +139,15 @@ int main(int argc, char ** argv)
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	NodeCity city;
+	mat4 world = screen;
+//	world = translate(world, vec3(centerX, centerY, 0)); // center on screen
+//	world = scale(world, vec3(gameScale, gameScale, 1.0)); // scale to screen
+//	world = translate(world, vec3(0, -cameraHeight, 0)); // vertical scrolling
+
+
+
+
+	NodeCity city(shaderIDMVP, window);
 
 	/*    GAME LOOP      */
 
@@ -145,6 +157,9 @@ int main(int argc, char ** argv)
 		{
 			glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 			glClear(GL_COLOR_BUFFER_BIT);
+			glUseProgram(uiProgramColorTexture);
+
+			city.draw(world);
 
 			glfwSwapBuffers(window);
 		}

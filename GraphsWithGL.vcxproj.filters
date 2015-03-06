@@ -6,11 +6,13 @@
     <ClCompile Include="GraphNode.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="VectorStuff.cpp" />
+    <ClCompile Include="NodeCity.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Edge.h" />
     <ClInclude Include="Graph.h" />
     <ClInclude Include="GraphNode.h" />
+    <ClInclude Include="NodeCity.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Debug\NLuceGameEngine.lib" />
