@@ -1,12 +1,12 @@
 #include "Sprite.h"
 
 
-Sprite::Sprite() :
-	rotation(0)
-{
-}
-
 
 Sprite::~Sprite()
 {
 }
+
+
+
+mat4* Sprite::defaultMatrix = nullptr;
+GLint Sprite::defaultMatrixLocation = -1;

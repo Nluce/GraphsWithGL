@@ -16,6 +16,8 @@ Shape::~Shape()
 }
 
 
+
+
 extern ShapeAlignment CENTER_LEFT(0.0f, 0.5f);
 extern ShapeAlignment CENTER(0.5f, 0.5f);
 extern ShapeAlignment CENTER_RIGHT(1.0f, 0.5f);

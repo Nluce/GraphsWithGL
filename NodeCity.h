@@ -6,7 +6,7 @@
 #include <GL/glew.h>
 #include <gl/wglew.h>
 #include <GLFW\glfw3.h>
-//#include <fstream>
+#include <fstream>
 //#include <time.h>
 #include "Texture.h"
 #include "Text.h"
@@ -27,41 +27,192 @@ public:
 
 	int tiles[widthInTiles][heightInTiles];
 
-	Texture cursorTexture;
-	Shape cursorShape;
-	Sprite cursorSprite;
+	Texture cursorTexture = Texture("cursor.png");
+	Shape cursorShape = Shape(&cursorTexture, BOTTOM_LEFT);
+	Sprite cursorSprite = Sprite(&cursorShape);
 	GLuint shaderIDMVP;
 	GLFWwindow* window;
 
-	ivec2 cursorPos;
+	Texture fourWayTexture = Texture("4way.png");
+	Texture threeWayTexture = Texture("3way.png");
+	Texture cornerTexture = Texture("Corner.png");
+	Texture straightTexture = Texture("StraightRoad.png");
 
+	Shape fourWayShape = Shape(&fourWayTexture);
+	Shape threeWayShape = Shape(&threeWayTexture);
+	Shape cornerShape = Shape(&cornerTexture);
+	Shape straightShape = Shape(&straightTexture);
+
+	Sprite fourWaySprite = Sprite(&fourWayShape);
+	Sprite northSouthSprite = Sprite(&straightShape, 90);
+	Sprite eastWestSprite = Sprite(&straightShape);
+
+	Sprite southEastSprite = Sprite(&cornerShape);
+	Sprite northEastSprite = Sprite(&cornerShape, 90);
+	Sprite northWestSprite = Sprite(&cornerShape, 180);
+	Sprite southWestSprite = Sprite(&cornerShape, 270);
+
+	Sprite north3WaySprite = Sprite(&threeWayShape, 180);
+	Sprite east3WaySprite = Sprite(&threeWayShape, 90);
+	Sprite south3WaySprite = Sprite(&threeWayShape, 0);
+	Sprite west3WaySprite = Sprite(&threeWayShape, 270);
+
+	ivec2 cursorPos;
 	static NodeCity * theCity;
+
+	const char * FILE_NAME = "NodeCity.txt";
 
 	static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 	{
 		theCity->keyEvent(key, scancode, action, mods);
 	}
 
-
-	NodeCity(GLuint shaderIDMVP, GLFWwindow* window) :
-		cursorTexture("cursor.png"),
-		cursorShape(&cursorTexture, BOTTOM_RIGHT),
-		shaderIDMVP(shaderIDMVP),
-		cursorSprite(),
+	NodeCity(GLFWwindow* window) :
 		window(window)
 	{
-		cout << "NodeCity constructor" << endl;
 		cursorTexture.filterNearest();
-		cursorSprite.setShape(&cursorShape);
 		glfwSetKeyCallback(window, &key_callback);
 		theCity = this;
 		cursorPos = ivec2(widthInTiles / 2, heightInTiles / 2);
+
+		load(FILE_NAME);
 	}
 
-	void draw(const mat4 & world)
+	Sprite * getSpriteForTile(int tileNumber)
 	{
+		switch (tileNumber)
+		{
+		case 1:
+			return &eastWestSprite;
+		case 2:
+			return &northSouthSprite;
+		case 3:
+			return &northSouthSprite;
+		case 4:
+			return &northSouthSprite;
+		case 5:
+			return &eastWestSprite;
+		case 6:
+			return &northEastSprite;
+		case 7:
+			return &southEastSprite;
+		case 8:
+			return &east3WaySprite;
+		case 9:
+			return &eastWestSprite;
+		case 10:
+			return &northWestSprite;
+		case 11:
+			return &southWestSprite;
+		case 12:
+			return &west3WaySprite;
+		case 13:
+			return &eastWestSprite;
+		case 14:
+			return &north3WaySprite;
+		case 15:
+			return &south3WaySprite;
+		case 16:
+			return &fourWaySprite;
+		default:
+			return nullptr;
+			break;
+		}
+	}
+
+	void save(const char * fileName)
+	{
+		ofstream out = ofstream(fileName);
+
+		for (int y = 0; y < heightInTiles; y++) {
+			for (int x = 0; x < widthInTiles; x++) {
+				int tileNumber = tiles[x][y];
+				out << tileNumber << " ";
+			}
+			out << endl;
+		}
+
+		out.close();
+	}
+
+	void load(const char * fileName)
+	{
+		ifstream in = ifstream(fileName);
+
+		for (int y = 0; y < heightInTiles; y++) {
+			for (int x = 0; x < widthInTiles; x++) {
+				int tileNumber;
+				in >> tileNumber;
+				tiles[x][y] = tileNumber;
+			}
+		}
+
+		in.close();
+	}
+
+	void draw()
+	{
+		static const ivec2 TILE_CENTER(TILE_SIZE / 2);
+
+		for (int y = 0; y < heightInTiles; y++) {
+			for (int x = 0; x < widthInTiles; x++) {
+				int tileNumber = tiles[x][y];
+				{
+					Sprite * tileSprite = getSpriteForTile(tileNumber);
+					if (tileSprite){
+						tileSprite->position = ivec2(x, y) * TILE_SIZE + TILE_CENTER;
+						tileSprite->draw();
+					}
+				}
+			}
+		}
+
 		cursorSprite.position = cursorPos * TILE_SIZE;
-		cursorSprite.draw(world, shaderIDMVP);
+		cursorSprite.draw();
+	}
+
+	bool isOnMap(int x, int y){
+		return x >= 0 && x < widthInTiles && y >= 0 && y < heightInTiles;
+	}
+
+	int getTileNumber(int x, int y)
+	{
+		if (isOnMap(x, y)){
+			return tiles[x][y];
+		}
+		return 0;
+	}
+
+	bool isRoad(int x, int y)
+	{
+		int t = getTileNumber(x, y);
+		return t >= 1 && t <= 16;
+	}
+
+	void fixRoad(int x, int y){
+		if (isRoad(x, y)) {
+			int tileNumber = 1;
+			if (isRoad(x, y + 1))
+				tileNumber += 1;
+			if (isRoad(x, y - 1))
+				tileNumber += 2;
+			if (isRoad(x + 1, y))
+				tileNumber += 4;
+			if (isRoad(x - 1, y))
+				tileNumber += 8;
+			tiles[x][y] = tileNumber;
+		}
+	}
+
+	void fixRoads()
+	{
+		int x = cursorPos.x;
+		int y = cursorPos.y;
+		fixRoad(x, y);
+		fixRoad(x, y + 1);
+		fixRoad(x, y - 1);
+		fixRoad(x + 1, y);
+		fixRoad(x - 1, y);
 	}
 
 	void keyEvent(int key, int scancode, int action, int mods)
@@ -78,6 +229,20 @@ public:
 			}
 			if (key == GLFW_KEY_RIGHT){
 				cursorPos.x++;
+			}
+			if (key == GLFW_KEY_BACKSPACE || key == GLFW_KEY_DELETE){
+				tiles[cursorPos.x][cursorPos.y] = 0;
+				fixRoads();
+			}
+			if (key == GLFW_KEY_R){
+				tiles[cursorPos.x][cursorPos.y] = 1;
+				fixRoads();
+			}
+			if (key == GLFW_KEY_L){
+				load(FILE_NAME);
+			}
+			if (key == GLFW_KEY_S){
+				save(FILE_NAME);
 			}
 		}
 

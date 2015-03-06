@@ -12,6 +12,7 @@
 #include <GLFW\glfw3.h>
 #include "Shape.h"
 #include <iostream>
+#include <math.h>
 
 using namespace glm;
 using namespace std;
@@ -21,19 +22,24 @@ static const vec3 zAxis(0, 0, 1);
 class Sprite
 {
 protected:
-	float rotation; // around z axis
+	float rotation = 0; // around z axis
 	Shape * shape;
 
 public:
-	bool mirror;
-	Sprite();
+	static mat4* defaultMatrix;
+	static GLint defaultMatrixLocation;
+
+
+	bool mirror = false;
+	Sprite(){}
+	Sprite(Shape * shape, int rotationInDegrees = 0):
+		shape(shape),
+		rotation(radians(float(rotationInDegrees)))
+	{}
 	virtual ~Sprite();
 
 	vec2 position;
 	vec2 velocity;
-
-	void drawSprite();
-	void moveSprite();
 
 	void setShape(Shape * newShape)
 	{
@@ -61,6 +67,36 @@ public:
 		rotation = newRotation;
 	}
 
+	void draw()
+	{
+		if (shape)
+		{
+			if (defaultMatrixLocation != -1){
+				mat4 out = defaultMatrix ? *defaultMatrix : mat4();
+
+				// then we move it to where we want it centered on the screen
+				out = translate(out, vec3(position.x, position.y, 0.0f));
+
+				// first we need to rotate the model
+				out = rotate(out, rotation, zAxis);
+
+				if (mirror)
+				{
+					out = scale(out, vec3(-1, 1, 1));
+				}
+
+				//send our mvp matrix to the shader
+				glUniformMatrix4fv(defaultMatrixLocation, 1, GL_FALSE, &out[0][0]);
+			}
+			shape->draw();
+		}
+		else
+		{
+			cerr << "No shape to draw" << endl;
+		}
+	}
+
+
 	void draw(const mat4 & matrixIn, int matrixUniformID)
 	{
 		if (shape)
@@ -87,7 +123,6 @@ public:
 		{
 			cerr << "No shape to draw" << endl;
 		}
-
 	}
 
 	float getLeft() const
