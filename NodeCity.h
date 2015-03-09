@@ -38,10 +38,23 @@ public:
 	Texture cornerTexture = Texture("Corner.png");
 	Texture straightTexture = Texture("StraightRoad.png");
 
+	Texture buildingTexture = Texture("Building.png");
+	Texture buildingTexture2 = Texture("Building2.png");
+	Texture buildingTexture3 = Texture("Building3.png");
+	Texture buildingTexture4 = Texture("Building4.png");
+	Texture buildingTexturePD = Texture("BuildingPD.png");
+
 	Shape fourWayShape = Shape(&fourWayTexture);
 	Shape threeWayShape = Shape(&threeWayTexture);
 	Shape cornerShape = Shape(&cornerTexture);
 	Shape straightShape = Shape(&straightTexture);
+
+	Shape buildingShape = Shape(&buildingTexture);
+	Shape buildingShape2 = Shape(&buildingTexture2);
+	Shape buildingShape3 = Shape(&buildingTexture3);
+	Shape buildingShape4 = Shape(&buildingTexture4);
+	Shape buildingShapePD = Shape(&buildingTexturePD);
+
 
 	Sprite fourWaySprite = Sprite(&fourWayShape);
 	Sprite northSouthSprite = Sprite(&straightShape, 90);
@@ -56,6 +69,13 @@ public:
 	Sprite east3WaySprite = Sprite(&threeWayShape, 90);
 	Sprite south3WaySprite = Sprite(&threeWayShape, 0);
 	Sprite west3WaySprite = Sprite(&threeWayShape, 270);
+
+	Sprite buildingSprite = Sprite(&buildingShape);
+	Sprite buildingSprite2 = Sprite(&buildingShape2);
+	Sprite buildingSprite3 = Sprite(&buildingShape3);
+	Sprite buildingSprite4 = Sprite(&buildingShape4);
+	Sprite buildingSpritePD = Sprite(&buildingShapePD);
+
 
 	ivec2 cursorPos;
 	static NodeCity * theCity;
@@ -114,6 +134,16 @@ public:
 			return &south3WaySprite;
 		case 16:
 			return &fourWaySprite;
+		case 17:
+			return &buildingSprite;
+		case 18:
+			return &buildingSprite2;
+		case 19:
+			return &buildingSprite3;
+		case 20:
+			return &buildingSprite4;
+		case 21:
+			return &buildingSpritePD;
 		default:
 			return nullptr;
 			break;
