@@ -267,22 +267,27 @@ public:
 			if (key == GLFW_KEY_1)
 			{
 				tiles[cursorPos.x][cursorPos.y] = 17;
+				fixRoads();
 			}
 			if (key == GLFW_KEY_2)
 			{
 				tiles[cursorPos.x][cursorPos.y] = 18;
+				fixRoads();
 			}
 			if (key == GLFW_KEY_3)
 			{
 				tiles[cursorPos.x][cursorPos.y] = 19;
+				fixRoads();
 			}
 			if (key == GLFW_KEY_4)
 			{
 				tiles[cursorPos.x][cursorPos.y] = 20;
+				fixRoads();
 			}
 			if (key == GLFW_KEY_P)
 			{
 				tiles[cursorPos.x][cursorPos.y] = 21;
+				fixRoads();
 			}
 
 
