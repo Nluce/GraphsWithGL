@@ -76,7 +76,7 @@ public:
 	Sprite buildingSprite4 = Sprite(&buildingShape4);
 	Sprite buildingSpritePD = Sprite(&buildingShapePD);
 
-
+	
 	ivec2 cursorPos;
 	static NodeCity * theCity;
 
@@ -264,6 +264,29 @@ public:
 				tiles[cursorPos.x][cursorPos.y] = 0;
 				fixRoads();
 			}
+			if (key == GLFW_KEY_1)
+			{
+				tiles[cursorPos.x][cursorPos.y] = 17;
+			}
+			if (key == GLFW_KEY_2)
+			{
+				tiles[cursorPos.x][cursorPos.y] = 18;
+			}
+			if (key == GLFW_KEY_3)
+			{
+				tiles[cursorPos.x][cursorPos.y] = 19;
+			}
+			if (key == GLFW_KEY_4)
+			{
+				tiles[cursorPos.x][cursorPos.y] = 20;
+			}
+			if (key == GLFW_KEY_P)
+			{
+				tiles[cursorPos.x][cursorPos.y] = 21;
+			}
+
+
+
 			if (key == GLFW_KEY_R){
 				tiles[cursorPos.x][cursorPos.y] = 1;
 				fixRoads();
