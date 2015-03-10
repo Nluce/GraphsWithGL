@@ -45,6 +45,12 @@ public:
 	Texture buildingTexture4 = Texture("Building4.png");
 	Texture buildingTexturePD = Texture("BuildingPD.png");
 
+	Texture grassTexture = Texture("GrassTile.png");
+	Texture dirtTexture = Texture("DirtTile.png");
+	Texture mountainTexture = Texture("Mountain.png");
+	Texture waterTexture = Texture("WaterTile.png");
+
+
 	Shape fourWayShape = Shape(&fourWayTexture);
 	Shape threeWayShape = Shape(&threeWayTexture);
 	Shape cornerShape = Shape(&cornerTexture);
@@ -55,6 +61,12 @@ public:
 	Shape buildingShape3 = Shape(&buildingTexture3);
 	Shape buildingShape4 = Shape(&buildingTexture4);
 	Shape buildingShapePD = Shape(&buildingTexturePD);
+
+	Shape grassShape = Shape(&grassTexture);
+	Shape dirtShape = Shape(&dirtTexture);
+	Shape mountainShape = Shape(&mountainTexture);
+	Shape waterShape = Shape(&waterTexture);
+
 
 
 	Sprite fourWaySprite = Sprite(&fourWayShape);
@@ -76,6 +88,11 @@ public:
 	Sprite buildingSprite3 = Sprite(&buildingShape3);
 	Sprite buildingSprite4 = Sprite(&buildingShape4);
 	Sprite buildingSpritePD = Sprite(&buildingShapePD);
+
+	Sprite grassSprite = Sprite(&grassShape);
+	Sprite dirtSprite = Sprite(&dirtShape);
+	Sprite mounatinSprite = Sprite(&mountainShape);
+	Sprite waterSprite = Sprite(&waterShape);
 
 	
 	ivec2 cursorPos;
@@ -145,6 +162,14 @@ public:
 			return &buildingSprite4;
 		case 21:
 			return &buildingSpritePD;
+		case 22:
+			return &grassSprite;
+		case 23:
+			return &dirtSprite;
+		case 24:
+			return &mounatinSprite;
+		case 25:
+			return &waterSprite;
 		default:
 			return nullptr;
 			break;
@@ -289,6 +314,22 @@ public:
 			if (key == GLFW_KEY_P)
 			{
 				setTile(21);
+			}
+			if (key == GLFW_KEY_G)
+			{
+				setTile(22);
+			}
+			if (key == GLFW_KEY_D)
+			{
+				setTile(23);
+			}
+			if (key == GLFW_KEY_M)
+			{
+				setTile(24);
+			}
+			if (key == GLFW_KEY_W)
+			{
+				setTile(25);
 			}
 			if (key == GLFW_KEY_R){
 				setTile(1);
