@@ -15,7 +15,7 @@
 //#include "Game.h"
 
 #include "Graph.h"
-
+#include "Tile.h"
 #include <iostream>
 
 using namespace std;
@@ -26,7 +26,10 @@ public:
 	static const int widthInTiles = 640 / TILE_SIZE;
 	static const int heightInTiles = 480 / TILE_SIZE;
 
+	Graph graph;
+
 	int tiles[widthInTiles][heightInTiles];
+	Tile tileObjects[widthInTiles][heightInTiles];
 
 	Texture cursorTexture = Texture("cursor.png");
 	Shape cursorShape = Shape(&cursorTexture, BOTTOM_LEFT);
@@ -275,6 +278,98 @@ public:
 	{
 		tiles[cursorPos.x][cursorPos.y] = tileNumber;
 		fixRoads();
+	}
+
+	float getCostForTile(int tileNumber)
+	{
+		float cost;
+		switch (tileNumber)
+		{
+		case 1:
+		case 2:
+		case 3:
+		case 4:
+		case 5:
+		case 6:
+		case 7:
+		case 8:
+		case 9:
+		case 10:
+		case 11:
+		case 12:
+		case 13:
+		case 14:
+		case 15:
+		case 16:
+			cost = 1;
+			break;
+		case 22:
+			cost = 2;
+			break;
+		case 23:
+			cost = 3;
+			break;
+		case 24:
+			cost = 10;
+			break;
+		case 25:
+			cost = 5;
+			break;
+		default:
+			cost = 314152965666;
+
+			break;
+		}
+		return cost;
+	}
+
+	void buildNodes()
+	{
+		int nodeNumber = 0;
+		for (int y = 0; y < heightInTiles; y++)
+		{
+			for (int x = 0; x < widthInTiles; x++)
+			{
+				Tile* tile = &tileObjects[x][y];
+				// 0 = Bottem left, 1 = Bottem Right, 2 = Top Right, 3 = Top Left
+
+
+				//  3  2
+				//  0  1
+				int tileNumber = tiles[x][y];
+				float cost = getCostForTile(tileNumber);
+				tile->nodes[0] = new GraphNode(nodeNumber++);
+				tile->nodes[1] = new GraphNode(nodeNumber++);
+				tile->nodes[2] = new GraphNode(nodeNumber++);
+				tile->nodes[3] = new GraphNode(nodeNumber++);
+				graph.AddNode(tile->nodes[0]);
+				graph.AddNode(tile->nodes[1]);
+				graph.AddNode(tile->nodes[2]);
+				graph.AddNode(tile->nodes[3]);
+				graph.ConnectNodes(tile->nodes[0], tile->nodes[1], cost);
+				graph.ConnectNodes(tile->nodes[1], tile->nodes[2], cost);
+				graph.ConnectNodes(tile->nodes[2], tile->nodes[3], cost);
+				graph.ConnectNodes(tile->nodes[3], tile->nodes[0], cost);
+				int x2 = x - 1;
+				if (x2 >= 0)
+				{
+					int tileNumber2 = tiles[x2][y];
+					float cost2 = getCostForTile(tileNumber2);
+					Tile* tile2 = &tileObjects[x2][y];
+					graph.ConnectNodes(tile2->nodes[1], tile->nodes[0], (cost + cost2) / 2);
+					graph.ConnectNodes(tile->nodes[3], tile2->nodes[2], (cost + cost2) / 2);
+				}
+				int y2 = y - 1;
+				if (y2 >= 0)
+				{
+					int tileNumber2 = tiles[x][y2];
+					float cost2 = getCostForTile(tileNumber2);
+					Tile* tile2 = &tileObjects[x][y2];
+					graph.ConnectNodes(tile2->nodes[2], tile->nodes[1], (cost + cost2) / 2);
+					graph.ConnectNodes(tile->nodes[0], tile2->nodes[3], (cost + cost2) / 2);
+				}
+			}
+		}
 	}
 
 	void keyEvent(int key, int scancode, int action, int mods)

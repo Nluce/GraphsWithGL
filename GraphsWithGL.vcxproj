@@ -83,6 +83,7 @@
     <ClInclude Include="Graph.h" />
     <ClInclude Include="GraphNode.h" />
     <ClInclude Include="NodeCity.h" />
+    <ClInclude Include="Tile.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Edge.cpp" />
@@ -90,6 +91,7 @@
     <ClCompile Include="GraphNode.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="NodeCity.cpp" />
+    <ClCompile Include="Tile.cpp" />
     <ClCompile Include="VectorStuff.cpp" />
   </ItemGroup>
   <ItemGroup>
