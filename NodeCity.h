@@ -245,6 +245,12 @@ public:
 		fixRoad(x - 1, y);
 	}
 
+	void setTile(int tileNumber)
+	{
+		tiles[cursorPos.x][cursorPos.y] = tileNumber;
+		fixRoads();
+	}
+
 	void keyEvent(int key, int scancode, int action, int mods)
 	{
 		if (action == GLFW_PRESS){
@@ -261,40 +267,30 @@ public:
 				cursorPos.x++;
 			}
 			if (key == GLFW_KEY_BACKSPACE || key == GLFW_KEY_DELETE){
-				tiles[cursorPos.x][cursorPos.y] = 0;
-				fixRoads();
+				setTile(0);
 			}
 			if (key == GLFW_KEY_1)
 			{
-				tiles[cursorPos.x][cursorPos.y] = 17;
-				fixRoads();
+				setTile(17);
 			}
 			if (key == GLFW_KEY_2)
 			{
-				tiles[cursorPos.x][cursorPos.y] = 18;
-				fixRoads();
+				setTile(18);
 			}
 			if (key == GLFW_KEY_3)
 			{
-				tiles[cursorPos.x][cursorPos.y] = 19;
-				fixRoads();
+				setTile(19);
 			}
 			if (key == GLFW_KEY_4)
 			{
-				tiles[cursorPos.x][cursorPos.y] = 20;
-				fixRoads();
+				setTile(20);
 			}
 			if (key == GLFW_KEY_P)
 			{
-				tiles[cursorPos.x][cursorPos.y] = 21;
-				fixRoads();
+				setTile(21);
 			}
-
-
-
 			if (key == GLFW_KEY_R){
-				tiles[cursorPos.x][cursorPos.y] = 1;
-				fixRoads();
+				setTile(1);
 			}
 			if (key == GLFW_KEY_L){
 				load(FILE_NAME);
