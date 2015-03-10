@@ -32,33 +32,26 @@ public:
 	{
 		cout << "Neighbors of node " << nodeNumber << ":" << endl;
 		for (Edge edge : edges){
-			if (edge.start == this){
-				cout << " node " << edge.end->nodeNumber << endl;
-			}
-			if (edge.end == this){
-				cout << " node " << edge.start->nodeNumber << endl;
+			cout << " node " << edge.end->nodeNumber << endl;
+		}
+	}
+
+	bool GoesTo(GraphNode * otherNode)
+	{
+		for (Edge edge : edges)
+		{
+			if (edge.end == otherNode)
+			{
+				return true;
 			}
 		}
+		return false;
 	}
 
 
 	bool IsNeighbor(GraphNode * otherNode)
 	{
-		for (Edge edge : edges)
-		{
-			if (edge.start == otherNode)
-			{
-				return true;
-				break;
-			}
-			if (edge.end == otherNode)
-			{
-				return true;
-				break;
-			}
-			
-		}
-		return false;
+		return otherNode->GoesTo(this) || this->GoesTo(otherNode);
 	}
 
 };

@@ -14,10 +14,11 @@
 #include "Shape.h"
 //#include "Game.h"
 
+#include "Graph.h"
+
 #include <iostream>
 
 using namespace std;
-
 
 class NodeCity {
 public:

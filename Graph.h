@@ -147,16 +147,11 @@ public:
 	{
 		// this initializes the Edge struct with the start, end and cost.
 		Edge edge = {
-			nodeA,
 			nodeB,
 			cost
 		};
 
-		// the edge must be added to both nodes
 		nodeA->AddEdge(edge);
-
-		// for now only store the edge on the start node.
-		//nodeB->AddEdge(edge);
 	}
 
 };
