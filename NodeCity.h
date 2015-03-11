@@ -317,7 +317,6 @@ public:
 			break;
 		default:
 			cost = 314152965666;
-
 			break;
 		}
 		return cost;

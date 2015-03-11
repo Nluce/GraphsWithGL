@@ -12,6 +12,5 @@ public:
 
 	GraphNode* nodes[4];
 
-
 };
 

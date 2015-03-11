@@ -150,7 +150,6 @@ public:
 			nodeB,
 			cost
 		};
-
 		nodeA->AddEdge(edge);
 	}
 
