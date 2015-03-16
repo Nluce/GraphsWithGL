@@ -347,13 +347,15 @@ public:
 					tile->nodes[3] = new GraphNode(nodeNumber++);
 				}
 				else
+					
 				{
 					tile->nodes[0] = nullptr;
 					tile->nodes[1] = nullptr;
 					tile->nodes[2] = nullptr;
 					tile->nodes[3] = nullptr;
-					continue;
+					
 				}
+				
 				
 				graph.AddNode(tile->nodes[0]);
 				graph.AddNode(tile->nodes[1]);

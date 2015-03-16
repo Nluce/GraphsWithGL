@@ -35,7 +35,13 @@ public:
 public:
 	void AddNode(GraphNode* node)
 	{
-		nodes.push_back(node);
+		void ConnectNodes(GraphNode* nodeA, GraphNode* nodeB, float cost)
+		{
+			if (nodeA == nullptr || nodeB == nullptr) {
+				return;
+			}
+			// do your normal stuff here...
+		}
 	}
 
 	void RemoveNode(GraphNode* nodeToRemove)
