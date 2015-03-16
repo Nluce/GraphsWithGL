@@ -42,7 +42,7 @@ public:
 
 	void RemoveNode(GraphNode* nodeToRemove)
 	{
-		if (nodeToRemove = nullptr)
+		if (nodeToRemove == nullptr)
 		{
 			return;
 		}
