@@ -35,12 +35,8 @@ public:
 public:
 	void AddNode(GraphNode* node)
 	{
-		void ConnectNodes(GraphNode* nodeA, GraphNode* nodeB, float cost)
-		{
-			if (nodeA == nullptr || nodeB == nullptr) {
-				return;
-			}
-			// do your normal stuff here...
+		if (node != nullptr){
+			nodes.push_back(node);
 		}
 	}
 
@@ -151,6 +147,9 @@ public:
 
 	void ConnectNodes(GraphNode* nodeA, GraphNode* nodeB, float cost)
 	{
+		if (nodeA == nullptr || nodeB == nullptr) {
+			return;
+		}
 		// this initializes the Edge struct with the start, end and cost.
 		Edge edge = {
 			nodeB,
