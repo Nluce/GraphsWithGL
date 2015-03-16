@@ -42,6 +42,10 @@ public:
 
 	void RemoveNode(GraphNode* nodeToRemove)
 	{
+		if (nodeToRemove = nullptr)
+		{
+			return;
+		}
 		for (int i = 0; i < nodes.size(); i++)
 		{
 			GraphNode * node = nodes[i];
