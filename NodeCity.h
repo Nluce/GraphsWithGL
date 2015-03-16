@@ -337,10 +337,24 @@ public:
 				//  0  1
 				int tileNumber = tiles[x][y];
 				float cost = getCostForTile(tileNumber);
-				tile->nodes[0] = new GraphNode(nodeNumber++);
-				tile->nodes[1] = new GraphNode(nodeNumber++);
-				tile->nodes[2] = new GraphNode(nodeNumber++);
-				tile->nodes[3] = new GraphNode(nodeNumber++);
+
+			
+				if (cost >= 100000)
+				{
+					tile->nodes[0] = new GraphNode(nodeNumber++);
+					tile->nodes[1] = new GraphNode(nodeNumber++);
+					tile->nodes[2] = new GraphNode(nodeNumber++);
+					tile->nodes[3] = new GraphNode(nodeNumber++);
+				}
+				else
+				{
+					tile->nodes[0] = nullptr;
+					tile->nodes[1] = nullptr;
+					tile->nodes[2] = nullptr;
+					tile->nodes[3] = nullptr;
+					continue;
+				}
+				
 				graph.AddNode(tile->nodes[0]);
 				graph.AddNode(tile->nodes[1]);
 				graph.AddNode(tile->nodes[2]);
