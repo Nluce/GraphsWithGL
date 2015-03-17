@@ -225,7 +225,8 @@ public:
 				int tileNumber = tiles[x][y];
 				{
 					Sprite * tileSprite = getSpriteForTile(tileNumber);
-					if (tileSprite){
+					if (tileSprite)
+					{
 						tileSprite->position = ivec2(x, y) * TILE_SIZE + TILE_CENTER;
 						tileSprite->draw();
 					}
@@ -292,6 +293,7 @@ public:
 		fixRoad(x, y - 1);
 		fixRoad(x + 1, y);
 		fixRoad(x - 1, y);
+		buildNodes();
 	}
 
 	void setTile(int tileNumber)
@@ -350,9 +352,18 @@ public:
 			for (int x = 0; x < widthInTiles; x++)
 			{
 				Tile* tile = &tileObjects[x][y];
+
+				for (int i = 0; i < 4; i++)
+				{
+					GraphNode * node = tile->nodes[i];
+
+						if (node != nullptr)
+						{
+							graph.RemoveNode(node);
+							delete node;
+						}
+				}
 				// 0 = Bottem left, 1 = Bottem Right, 2 = Top Right, 3 = Top Left
-
-
 				//  3  2
 				//  0  1
 				int tileNumber = tiles[x][y];
@@ -421,10 +432,6 @@ public:
 		if (action == GLFW_PRESS){
 			if (key == GLFW_KEY_UP){
 				cursorPos.y++;
-			}
-			if (key == GLFW_KEY_B)
-			{
-				buildNodes();
 			}
 			if (key == GLFW_KEY_DOWN){
 				cursorPos.y--;
