@@ -118,7 +118,7 @@ public:
 	{
 		if (start == nullptr || end == nullptr)
 		{
-			return;
+			return -1;
 		}
 		start->stepCount = 0;
 
