@@ -80,8 +80,8 @@ public:
 	Sprite nodeDotSprite = Sprite(&nodeDotShape);
 	Sprite upArrowSprite = Sprite(&arrowShape);
 	Sprite rightArrowSprite = Sprite(&arrowShape,90);
-	Sprite upArrowSprite = Sprite(&arrowShape,180);
-	Sprite upArrowSprite = Sprite(&arrowShape,270);
+	Sprite downArrowSprite = Sprite(&arrowShape,180);
+	Sprite leftArrowSprite = Sprite(&arrowShape,270);
 
 
 
@@ -237,6 +237,11 @@ public:
 					}
 				}
 			}
+		}
+
+		for (auto node : graph.nodes){
+			nodeDotSprite.position = node->position;
+			nodeDotSprite.draw();
 		}
 
 		cursorSprite.position = cursorPos * TILE_SIZE;
