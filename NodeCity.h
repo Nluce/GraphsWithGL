@@ -350,7 +350,8 @@ public:
 
 					tile->nodes[0]->position = tilePosition + ivec2(TILE_SIZE / 4, TILE_SIZE / 4);  // 1/4 over and 1/4 up
 					tile->nodes[1]->position = tilePosition + ivec2(TILE_SIZE * 3 / 4, TILE_SIZE / 4); // 3/4 over and 1/4 up
-					
+					tile->nodes[2]->position = tilePosition + ivec2(TILE_SIZE * 3 / 4, TILE_SIZE * 3 / 4);
+					tile->nodes[3]->position = tilePosition + ivec2(TILE_SIZE  / 4, TILE_SIZE * 3 / 4);
 					/* navarre, you finish the next 2 nodes.*/
 					//tile->nodes[2]->position
 					//tile->nodes[3]->position
