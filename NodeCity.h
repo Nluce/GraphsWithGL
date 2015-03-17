@@ -76,14 +76,8 @@ public:
 	Shape mountainShape = Shape(&mountainTexture);
 	Shape waterShape = Shape(&waterTexture);
 
-
 	Sprite nodeDotSprite = Sprite(&nodeDotShape);
-	Sprite upArrowSprite = Sprite(&arrowShape);
-	Sprite rightArrowSprite = Sprite(&arrowShape,90);
-	Sprite downArrowSprite = Sprite(&arrowShape,180);
-	Sprite leftArrowSprite = Sprite(&arrowShape,270);
-
-
+	Sprite rightArrowSprite = Sprite(&arrowShape);
 
 	Sprite fourWaySprite = Sprite(&fourWayShape);
 	Sprite northSouthSprite = Sprite(&straightShape, 90);
@@ -242,6 +236,14 @@ public:
 		for (auto node : graph.nodes){
 			nodeDotSprite.position = node->position;
 			nodeDotSprite.draw();
+			for (auto edge : node->edges){
+				ivec2 direction = edge.end->position - node->position;
+				float angle = atan2(direction.y, direction.x);
+				float d = degrees(angle);
+				rightArrowSprite.setRotation(d);
+				rightArrowSprite.position = node->position + direction / 2;
+				rightArrowSprite.draw();
+			}
 		}
 
 		cursorSprite.position = cursorPos * TILE_SIZE;

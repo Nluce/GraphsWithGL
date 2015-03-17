@@ -64,7 +64,7 @@ public:
 	}
 	void setRotation(float newRotation)
 	{
-		rotation = newRotation;
+		rotation = radians(newRotation);
 	}
 
 	void draw()
