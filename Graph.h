@@ -82,7 +82,7 @@ public:
 	{
 		if (start == nullptr || end == nullptr)
 		{
-			return;
+			return false;
 		}
 		ResetVisited();
 
