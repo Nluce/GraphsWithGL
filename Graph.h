@@ -80,6 +80,10 @@ public:
 
 	bool SearchDFS(GraphNode* start, GraphNode* end)
 	{
+		if (start == nullptr || end == nullptr)
+		{
+			return;
+		}
 		ResetVisited();
 
 		std::stack<GraphNode*> nodeStack;
@@ -112,6 +116,10 @@ public:
 
 	int HowManyLinksBetween(GraphNode* start, GraphNode* end)
 	{
+		if (start == nullptr || end == nullptr)
+		{
+			return;
+		}
 		start->stepCount = 0;
 
 		ResetVisited();
