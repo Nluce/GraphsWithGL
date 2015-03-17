@@ -339,7 +339,7 @@ public:
 				float cost = getCostForTile(tileNumber);
 
 			
-				if (cost >= 100000)
+				if (cost <= 100000)
 				{
 					tile->nodes[0] = new GraphNode(nodeNumber++);
 					tile->nodes[1] = new GraphNode(nodeNumber++);
