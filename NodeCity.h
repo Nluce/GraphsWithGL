@@ -330,10 +330,10 @@ public:
 			cost = 3;
 			break;
 		case 24:
-			cost = 10;
+			cost = 66666666666666;
 			break;
 		case 25:
-			cost = 5;
+			cost = 6666666666666;
 			break;
 		default:
 			cost = 314152965666;
