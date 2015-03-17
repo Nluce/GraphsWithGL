@@ -4,6 +4,7 @@
 #include "Edge.h"
 #include <vector>
 #include <iostream>
+#include <glm/glm.hpp>
 
 using namespace std;
 
@@ -16,7 +17,7 @@ public:
 	EdgeList edges;
 	bool visited;
 	int stepCount;
-
+	glm::ivec2 position;
 	GraphNode(int num)
 	{
 		nodeNumber = num;
