@@ -417,6 +417,10 @@ public:
 			if (key == GLFW_KEY_UP){
 				cursorPos.y++;
 			}
+			if (key == GLFW_KEY_B)
+			{
+				buildNodes();
+			}
 			if (key == GLFW_KEY_DOWN){
 				cursorPos.y--;
 			}
