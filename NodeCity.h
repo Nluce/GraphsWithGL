@@ -106,6 +106,8 @@ public:
 
 	
 	ivec2 cursorPos;
+	bool drawNodes = false;
+
 	static NodeCity * theCity;
 
 	const char * FILE_NAME = "NodeCity.txt";
@@ -235,19 +237,20 @@ public:
 			}
 		}
 
-		for (auto node : graph.nodes){
-			nodeDotSprite.position = node->position;
-			nodeDotSprite.draw();
-			for (auto edge : node->edges){
-				ivec2 direction = edge.end->position - node->position;
-				float angle = atan2(direction.y, direction.x);
-				float d = degrees(angle);
-				rightArrowSprite.setRotation(d);
-				rightArrowSprite.position = node->position + direction / 2;
-				rightArrowSprite.draw();
+		if (drawNodes){
+			for (auto node : graph.nodes){
+				nodeDotSprite.position = node->position;
+				nodeDotSprite.draw();
+				for (auto edge : node->edges){
+					ivec2 direction = edge.end->position - node->position;
+					float angle = atan2(direction.y, direction.x);
+					float d = degrees(angle);
+					rightArrowSprite.setRotation(d);
+					rightArrowSprite.position = node->position + direction / 2;
+					rightArrowSprite.draw();
+				}
 			}
 		}
-
 		cursorSprite.position = cursorPos * TILE_SIZE;
 		cursorSprite.draw();
 	}
@@ -490,6 +493,9 @@ public:
 			}
 			if (key == GLFW_KEY_S){
 				save(FILE_NAME);
+			}
+			if (key == GLFW_KEY_N){
+				drawNodes = !drawNodes;
 			}
 		}
 
