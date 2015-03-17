@@ -124,6 +124,7 @@ public:
 		cursorPos = ivec2(widthInTiles / 2, heightInTiles / 2);
 
 		load(FILE_NAME);
+		buildNodes();
 	}
 
 	Sprite * getSpriteForTile(int tileNumber)
