@@ -37,6 +37,10 @@ public:
 	GLuint shaderIDMVP;
 	GLFWwindow* window;
 
+
+	Texture arrowTexture = Texture("Arrow.png");
+	Texture nodeDotTexture = Texture("nodeMarker.png");
+
 	Texture fourWayTexture = Texture("4way.png");
 	Texture threeWayTexture = Texture("3way.png");
 	Texture cornerTexture = Texture("Corner.png");
@@ -54,6 +58,8 @@ public:
 	Texture waterTexture = Texture("WaterTile.png");
 
 
+	Shape nodeDotShape = Shape(&nodeDotTexture);
+	Shape arrowShape = Shape(&arrowTexture);
 	Shape fourWayShape = Shape(&fourWayTexture);
 	Shape threeWayShape = Shape(&threeWayTexture);
 	Shape cornerShape = Shape(&cornerTexture);
@@ -69,6 +75,13 @@ public:
 	Shape dirtShape = Shape(&dirtTexture);
 	Shape mountainShape = Shape(&mountainTexture);
 	Shape waterShape = Shape(&waterTexture);
+
+
+	Sprite nodeDotSprite = Sprite(&nodeDotShape);
+	Sprite upArrowSprite = Sprite(&arrowShape);
+	Sprite rightArrowSprite = Sprite(&arrowShape,90);
+	Sprite upArrowSprite = Sprite(&arrowShape,180);
+	Sprite upArrowSprite = Sprite(&arrowShape,270);
 
 
 
