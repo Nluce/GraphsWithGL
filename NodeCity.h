@@ -23,6 +23,7 @@ using namespace std;
 class NodeCity {
 public:
 	static const int TILE_SIZE = 32;
+	static const int NODE_SIZE = TILE_SIZE / 2;
 	static const int widthInTiles = 640 / TILE_SIZE;
 	static const int heightInTiles = 480 / TILE_SIZE;
 
@@ -34,6 +35,9 @@ public:
 	Texture cursorTexture = Texture("cursor.png");
 	Shape cursorShape = Shape(&cursorTexture, BOTTOM_LEFT);
 	Sprite cursorSprite = Sprite(&cursorShape);
+	Texture cursor16x16Texture = Texture("cursor16x16.png");
+	Shape cursor16x16Shape = Shape(&cursor16x16Texture, BOTTOM_LEFT);
+	Sprite cursor16x16Sprite = Sprite(&cursor16x16Shape);
 	GLuint shaderIDMVP;
 	GLFWwindow* window;
 
@@ -106,7 +110,13 @@ public:
 
 	
 	ivec2 cursorPos;
-	bool drawNodes = false;
+	enum Mode {
+		MAIN_MENU,
+		MAP_EDITOR,
+		NODE_EDITOR,
+		RUN_MODE
+	};
+	Mode mode = MAIN_MENU;
 
 	static NodeCity * theCity;
 
@@ -127,6 +137,7 @@ public:
 
 		load(FILE_NAME);
 		buildNodes();
+		showMenu();
 	}
 
 	Sprite * getSpriteForTile(int tileNumber)
@@ -237,7 +248,7 @@ public:
 			}
 		}
 
-		if (drawNodes){
+		if (mode == NODE_EDITOR){
 			for (auto node : graph.nodes){
 				nodeDotSprite.position = node->position;
 				nodeDotSprite.draw();
@@ -250,9 +261,14 @@ public:
 					rightArrowSprite.draw();
 				}
 			}
+			cursor16x16Sprite.position = cursorPos * NODE_SIZE;
+			cursor16x16Sprite.draw();
 		}
-		cursorSprite.position = cursorPos * TILE_SIZE;
-		cursorSprite.draw();
+
+		if (mode == MAP_EDITOR){
+			cursorSprite.position = cursorPos * TILE_SIZE;
+			cursorSprite.draw();
+		}
 	}
 
 	bool isOnMap(int x, int y){
@@ -357,6 +373,7 @@ public:
 			{
 				Tile* tile = &tileObjects[x][y];
 
+				// delete the old nodes
 				for (int i = 0; i < 4; i++)
 				{
 					GraphNode * node = tile->nodes[i];
@@ -367,6 +384,8 @@ public:
 							delete node;
 						}
 				}
+
+
 				// 0 = Bottem left, 1 = Bottem Right, 2 = Top Right, 3 = Top Left
 				//  3  2
 				//  0  1
@@ -431,86 +450,172 @@ public:
 		}
 	}
 
+	void showMenu()
+	{
+		cout << endl;
+		switch (mode){
+		case MAIN_MENU:
+			cout << "Main Menu:" << endl;
+			cout << "M = Map Editor" << endl;
+			cout << "N = Node Editor" << endl;
+			cout << "R = Run Mode" << endl;
+			break;
+		case MAP_EDITOR:
+			cout << "Map Editor:" << endl;
+			cout << "Arrow Keys = Move Cursor" << endl;
+			cout << "Backspace/Delete = Delete Tile" << endl;
+			cout << "R = Road" << endl;
+			cout << "1 - 4 = Building 1 - 4" << endl;
+			cout << "P = Police Station" << endl;
+			cout << "G = Grass" << endl;
+			cout << "D = Dirt" << endl;
+			cout << "M = Mountian" << endl;
+			cout << "W = Water" << endl;
+			cout << "S = Save Map" << endl;
+			cout << "L = Load Map (discards changes)" << endl;
+			cout << "ESC = Return to Main Menu" << endl;
+			break;
+		case NODE_EDITOR:
+			cout << "Node Editor:" << endl;
+			cout << "Arrow Keys = Move Cursor" << endl;
+			cout << "ESC = Return to Main Menu" << endl;
+			break;
+		case RUN_MODE:
+			cout << "Run Mode:" << endl;
+			cout << "ESC = Return to Main Menu" << endl;
+			break;
+		}
+	}
+
+	void switchMode(Mode newMode){
+		if (mode != newMode){
+			if (mode == NODE_EDITOR){
+				cursorPos /= 2;
+			}
+			else if (newMode == NODE_EDITOR){
+				cursorPos *= 2;
+			}
+			mode = newMode;
+			showMenu();
+		}
+	}
+
 	void keyEvent(int key, int scancode, int action, int mods)
 	{
 		if (action == GLFW_PRESS){
-			if (key == GLFW_KEY_UP){
-				cursorPos.y++;
+			switch (key){
+			case GLFW_KEY_ESCAPE:
+				switchMode(MAIN_MENU);
+				break;
 			}
-			if (key == GLFW_KEY_DOWN){
-				cursorPos.y--;
-			}
-			if (key == GLFW_KEY_LEFT){
-				cursorPos.x--;
-			}
-			if (key == GLFW_KEY_RIGHT){
-				cursorPos.x++;
-			}
-			if (key == GLFW_KEY_BACKSPACE || key == GLFW_KEY_DELETE){
-				setTile(0);
-			}
-			if (key == GLFW_KEY_1)
+
+			switch (mode){
+			case MAIN_MENU:
 			{
-				setTile(17);
+				switch (key){
+				case GLFW_KEY_M:
+					switchMode(MAP_EDITOR);
+					break;
+				case GLFW_KEY_N:
+					switchMode(NODE_EDITOR);
+					break;
+				case GLFW_KEY_R:
+					switchMode(RUN_MODE);
+					break;
+				}
 			}
-			if (key == GLFW_KEY_2)
+					break;
+
+			case MAP_EDITOR:
 			{
-				setTile(18);
+				switch (key){
+				case GLFW_KEY_UP:
+					cursorPos.y++;
+					break;
+				case GLFW_KEY_DOWN:
+					cursorPos.y--;
+					break;
+				case GLFW_KEY_LEFT:
+					cursorPos.x--;
+					break;
+				case GLFW_KEY_RIGHT:
+					cursorPos.x++;
+					break;
+				case GLFW_KEY_BACKSPACE:
+				case GLFW_KEY_DELETE:
+					setTile(0);
+					break;
+				case GLFW_KEY_1:
+					setTile(17);
+					break;
+				case GLFW_KEY_2:
+					setTile(18);
+					break;
+				case GLFW_KEY_3:
+					setTile(19);
+					break;
+				case GLFW_KEY_4:
+					setTile(20);
+					break;
+				case GLFW_KEY_P:
+					setTile(21);
+					break;
+				case GLFW_KEY_G:
+					setTile(22);
+					break;
+				case GLFW_KEY_D:
+					setTile(23);
+					break;
+				case GLFW_KEY_M:
+					setTile(24);
+					break;
+				case GLFW_KEY_W:
+					setTile(25);
+					break;
+				case GLFW_KEY_R:
+					setTile(1);
+					break;
+				case GLFW_KEY_L:
+					load(FILE_NAME);
+					break;
+				case GLFW_KEY_S:
+					save(FILE_NAME);
+					break;
+				}
+
+
+				cursorPos = clamp(cursorPos, ivec2(0, 0), ivec2(widthInTiles - 1, heightInTiles - 1));
+
 			}
-			if (key == GLFW_KEY_3)
-			{
-				setTile(19);
+				break;
+			case NODE_EDITOR:
+				switch (key){
+				case GLFW_KEY_UP:
+					cursorPos.y++;
+					break;
+				case GLFW_KEY_DOWN:
+					cursorPos.y--;
+					break;
+				case GLFW_KEY_LEFT:
+					cursorPos.x--;
+					break;
+				case GLFW_KEY_RIGHT:
+					cursorPos.x++;
+					break;
+
+				}
+				cursorPos = clamp(cursorPos, ivec2(0, 0), ivec2(widthInTiles * 2 - 1, heightInTiles * 2 - 1));
+				break;
+			case RUN_MODE:
+				break;
 			}
-			if (key == GLFW_KEY_4)
-			{
-				setTile(20);
-			}
-			if (key == GLFW_KEY_P)
-			{
-				setTile(21);
-			}
-			if (key == GLFW_KEY_G)
-			{
-				setTile(22);
-			}
-			if (key == GLFW_KEY_D)
-			{
-				setTile(23);
-			}
-			if (key == GLFW_KEY_M)
-			{
-				setTile(24);
-			}
-			if (key == GLFW_KEY_W)
-			{
-				setTile(25);
-			}
-			if (key == GLFW_KEY_R){
-				setTile(1);
-			}
-			if (key == GLFW_KEY_L){
-				load(FILE_NAME);
-			}
-			if (key == GLFW_KEY_S){
-				save(FILE_NAME);
-			}
-			if (key == GLFW_KEY_N){
-				drawNodes = !drawNodes;
-			}
+
+
+
+			
+
 		}
 
-		if (cursorPos.x < 0) {
-			cursorPos.x = 0;
-		}
-		else if (cursorPos.x >= widthInTiles) {
-			cursorPos.x = widthInTiles - 1;
-		}
-		if (cursorPos.y < 0) {
-			cursorPos.y = 0;
-		}
-		else if (cursorPos.y >= heightInTiles) {
-			cursorPos.y = heightInTiles - 1;
-		}
 	}
 
 };
