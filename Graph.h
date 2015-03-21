@@ -1,6 +1,10 @@
 #pragma once
 #include "GraphNode.h"
 #include <stack>
+#include <math.h>
+#include <set>
+#include <glm/glm.hpp>
+
 class Graph
 {
 	typedef std::vector<GraphNode*> NodeList;
@@ -69,6 +73,53 @@ public:
 			}
 
 		}
+	}
+
+	GraphNode* FindClosestNode(glm::ivec2 position) const
+	{
+		float closestDistance = 1000000;
+		GraphNode * closestNode = nullptr;
+		for (auto node : nodes)
+		{
+			float distance = node->distanceTo(position);
+			if (distance < closestDistance)
+			{
+				closestDistance = distance;
+				closestNode = node;
+			}
+		}
+		return closestNode;
+	}
+
+
+
+	bool conpareGScores(GraphNode * left, GraphNode * right)
+	{
+		return left->gScore < right->gScore;
+	}
+
+	vector<GraphNode *> FindPath(GraphNode * start, GraphNode * end)
+	{
+		vector<GraphNode *> path;
+		set<GraphNode *> queue;
+
+		for (auto node : nodes){
+			node->n = nullptr;
+			node->gScore = INFINITY;
+		}
+
+		queue.insert(start);
+		start->n = start;
+		start->gScore = 0;
+
+
+		while (!queue.empty())
+		{
+			auto current = queue.erase(queue.rbegin());
+		}
+
+
+
 	}
 
 	void ResetVisited()

@@ -17,6 +17,7 @@
 #include "Graph.h"
 #include "Tile.h"
 #include <iostream>
+#include "Car.h"
 
 using namespace std;
 
@@ -60,8 +61,10 @@ public:
 	Texture dirtTexture = Texture("DirtTile.png");
 	Texture mountainTexture = Texture("Mountain.png");
 	Texture waterTexture = Texture("WaterTile.png");
+	Texture redCarTexture = Texture("redCar.png");
 
 
+	Shape redCarShape = Shape(&redCarTexture);
 	Shape nodeDotShape = Shape(&nodeDotTexture);
 	Shape arrowShape = Shape(&arrowTexture);
 	Shape fourWayShape = Shape(&fourWayTexture);
@@ -97,6 +100,8 @@ public:
 	Sprite south3WaySprite = Sprite(&threeWayShape, 0);
 	Sprite west3WaySprite = Sprite(&threeWayShape, 270);
 
+	Sprite redcarSprite = Sprite(&redCarShape);
+
 	Sprite buildingSprite = Sprite(&buildingShape);
 	Sprite buildingSprite2 = Sprite(&buildingShape2);
 	Sprite buildingSprite3 = Sprite(&buildingShape3);
@@ -117,7 +122,11 @@ public:
 		RUN_MODE
 	};
 	Mode mode = MAIN_MENU;
-
+	bool showNodes = false;
+	vector<ivec2>checkpoints;
+	vector<ivec2>spawnPoints;
+	vector <Car> cars;
+	
 	static NodeCity * theCity;
 
 	const char * FILE_NAME = "NodeCity.txt";
@@ -200,6 +209,8 @@ public:
 		}
 	}
 
+	
+
 	void save(const char * fileName)
 	{
 		ofstream out = ofstream(fileName);
@@ -248,18 +259,33 @@ public:
 			}
 		}
 
-		if (mode == NODE_EDITOR){
-			for (auto node : graph.nodes){
-				nodeDotSprite.position = node->position;
-				nodeDotSprite.draw();
-				for (auto edge : node->edges){
-					ivec2 direction = edge.end->position - node->position;
-					float angle = atan2(direction.y, direction.x);
-					float d = degrees(angle);
-					rightArrowSprite.setRotation(d);
-					rightArrowSprite.position = node->position + direction / 2;
-					rightArrowSprite.draw();
+		if (mode == NODE_EDITOR)
+		{
+			if (showNodes)
+			{
+				for (auto node : graph.nodes){
+					nodeDotSprite.position = node->position;
+					nodeDotSprite.draw();
+					for (auto edge : node->edges){
+						ivec2 direction = edge.end->position - node->position;
+						float angle = atan2(direction.y, direction.x);
+						float d = degrees(angle);
+						rightArrowSprite.setRotation(d);
+						rightArrowSprite.position = node->position + direction / 2;
+						rightArrowSprite.draw();
+					}
 				}
+			}
+			for (auto spawnPoint : spawnPoints)
+			{
+				redcarSprite.position = spawnPoint;
+				redcarSprite.draw();
+			}
+
+			for (auto checkpoint : checkpoints)
+			{
+				nodeDotSprite.position = checkpoint;
+				nodeDotSprite.draw();
 			}
 			cursor16x16Sprite.position = cursorPos * NODE_SIZE;
 			cursor16x16Sprite.draw();
@@ -478,6 +504,8 @@ public:
 		case NODE_EDITOR:
 			cout << "Node Editor:" << endl;
 			cout << "Arrow Keys = Move Cursor" << endl;
+			cout << "N = Show/hide nodes" << endl;
+			cout << "S = Create Spawn point" << endl;
 			cout << "ESC = Return to Main Menu" << endl;
 			break;
 		case RUN_MODE:
@@ -497,6 +525,15 @@ public:
 			}
 			mode = newMode;
 			showMenu();
+		}
+	}
+
+	void startRunMode()
+	{
+		for (auto spawnPoint : spawnPoints)
+		{
+			//cars.push_back(Car(spawnPoint));
+
 		}
 	}
 
@@ -521,6 +558,7 @@ public:
 					break;
 				case GLFW_KEY_R:
 					switchMode(RUN_MODE);
+					startRunMode();
 					break;
 				}
 			}
@@ -602,6 +640,16 @@ public:
 				case GLFW_KEY_RIGHT:
 					cursorPos.x++;
 					break;
+				case GLFW_KEY_C:
+					checkpoints.push_back(cursorPos  *  NODE_SIZE + NODE_SIZE / 2);
+					break;
+				case GLFW_KEY_N:
+					showNodes = !showNodes;
+					break;
+				case GLFW_KEY_S:
+					spawnPoints.push_back(cursorPos  *  NODE_SIZE + NODE_SIZE / 2);
+					break;
+
 
 				}
 				cursorPos = clamp(cursorPos, ivec2(0, 0), ivec2(widthInTiles * 2 - 1, heightInTiles * 2 - 1));

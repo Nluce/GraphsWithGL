@@ -15,8 +15,18 @@ public:
 	int nodeNumber;
 	
 	EdgeList edges;
-	bool visited;
 	int stepCount;
+
+	// used in A*
+	bool visited;
+	GraphNode* n;
+	float gScore;
+	float fScore;
+
+
+
+
+
 	glm::ivec2 position;
 	GraphNode(int num)
 	{
@@ -53,6 +63,18 @@ public:
 	bool IsNeighbor(GraphNode * otherNode)
 	{
 		return otherNode->GoesTo(this) || this->GoesTo(otherNode);
+	}
+
+
+	float distanceTo(glm::ivec2 otherPoint)
+	{
+		glm::ivec2 v = position - otherPoint;
+		return glm::length(v);
+	}
+
+	bool operator<(GraphNode * other)
+	{
+		return gScore < other->gScore;
 	}
 
 };

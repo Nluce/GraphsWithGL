@@ -8,6 +8,7 @@
     <ClCompile Include="VectorStuff.cpp" />
     <ClCompile Include="NodeCity.cpp" />
     <ClCompile Include="Tile.cpp" />
+    <ClCompile Include="Car.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Edge.h" />
@@ -15,6 +16,7 @@
     <ClInclude Include="GraphNode.h" />
     <ClInclude Include="NodeCity.h" />
     <ClInclude Include="Tile.h" />
+    <ClInclude Include="Car.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Debug\NLuceGameEngine.lib" />
