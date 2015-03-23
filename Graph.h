@@ -98,7 +98,7 @@ public:
 		return left->gScore < right->gScore;
 	}
 
-	vector<GraphNode *> FindPath(GraphNode * start, GraphNode * end)
+	vector<GraphNode *> FindPath(GraphNode * start, GraphNode * goal)
 	{
 		vector<GraphNode *> path;
 		set<GraphNode *> queue;
@@ -111,11 +111,14 @@ public:
 		queue.insert(start);
 		start->n = start;
 		start->gScore = 0;
+		start->fScore = start->gScore + start->distanceTo(goal->position);
 
 
 		while (!queue.empty())
 		{
-			auto current = queue.erase(queue.rbegin());
+			auto current = queue.erase(queue.begin());
+
+
 		}
 
 

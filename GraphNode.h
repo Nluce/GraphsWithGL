@@ -68,13 +68,13 @@ public:
 
 	float distanceTo(glm::ivec2 otherPoint)
 	{
-		glm::ivec2 v = position - otherPoint;
+		glm::vec2 v = position - otherPoint;
 		return glm::length(v);
 	}
 
 	bool operator<(GraphNode * other)
 	{
-		return gScore < other->gScore;
+		return fScore < other->fScore;
 	}
 
 };
