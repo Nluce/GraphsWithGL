@@ -91,7 +91,10 @@ public:
 		return closestNode;
 	}
 
+	void ReconstructPath()
+	{
 
+	}
 
 	bool conpareGScores(GraphNode * left, GraphNode * right)
 	{
@@ -117,7 +120,10 @@ public:
 		while (!queue.empty())
 		{
 			auto current = queue.erase(queue.begin());
-
+			if (*current == goal)
+			{
+				return 
+			}
 
 		}
 
