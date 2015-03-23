@@ -17,9 +17,12 @@ public:
 	EdgeList edges;
 	int stepCount;
 
-	// used in A*
 	bool visited;
-	GraphNode* n;
+
+	// used in A*
+	bool inOpenSet;
+	bool inClosedSet;
+	GraphNode* cameFrom;
 	float gScore;
 	float fScore;
 
@@ -74,6 +77,9 @@ public:
 
 	bool operator<(GraphNode * other)
 	{
+		if (fScore == other->fScore){
+			return nodeNumber < other->nodeNumber;
+		}
 		return fScore < other->fScore;
 	}
 

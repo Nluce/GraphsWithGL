@@ -91,44 +91,95 @@ public:
 		return closestNode;
 	}
 
-	void ReconstructPath()
+	GraphNode* GetNodeAtPosition(glm::ivec2 position) const
 	{
+		for (auto node : nodes){
+			if (node->position == position) {
+				return node;
+			}
+		}
 
+		return nullptr;
 	}
 
-	bool conpareGScores(GraphNode * left, GraphNode * right)
+	vector<GraphNode *> ReverseOrder(vector<GraphNode *> in)
 	{
-		return left->gScore < right->gScore;
+		auto size = in.size();
+		vector<GraphNode *> out;
+
+		for (int i = 0; i < size; i++){
+			out.push_back(in[size - i - 1]);
+		}
+
+		return out;
 	}
 
-	vector<GraphNode *> FindPath(GraphNode * start, GraphNode * goal)
+
+	vector<GraphNode *> AStar(GraphNode * start, GraphNode * goal)
 	{
-		vector<GraphNode *> path;
+		vector<GraphNode *> out;
+
 		set<GraphNode *> queue;
 
 		for (auto node : nodes){
-			node->n = nullptr;
+			node->cameFrom = nullptr;
 			node->gScore = INFINITY;
+			node->fScore = INFINITY;
+			node->inClosedSet = false;
+			node->inOpenSet = false;
 		}
 
 		queue.insert(start);
-		start->n = start;
+		start->cameFrom = start;
 		start->gScore = 0;
 		start->fScore = start->gScore + start->distanceTo(goal->position);
 
 
 		while (!queue.empty())
 		{
-			auto current = queue.erase(queue.begin());
-			if (*current == goal)
+			auto first = queue.begin();
+			GraphNode * current = *first;
+			queue.erase(first);
+			if (current == goal)
 			{
-				return 
+				do{
+					out.push_back(current);
+					current = current->cameFrom;
+				} while (current != start);
+				out.push_back(current);
+
+				// build the path from the cameFrom variable
+				return ReverseOrder(out);
+			}
+			current->inClosedSet = true;
+			for (auto edge : current->edges)
+			{
+				auto neighbor = edge.end;
+				if (!neighbor->inClosedSet)
+				{
+					float newScore = current->gScore + edge.cost;
+
+
+					if (newScore < neighbor->gScore){
+						if (neighbor->inOpenSet){
+							auto f = queue.find(neighbor);
+							queue.erase(f);
+						}
+
+						neighbor->cameFrom = current;
+						neighbor->gScore = newScore;
+						neighbor->fScore = neighbor->gScore + neighbor->distanceTo(goal->position);
+						queue.insert(neighbor);
+						neighbor->inOpenSet = true;
+
+					}
+				}
+
 			}
 
 		}
 
-
-
+		return out;
 	}
 
 	void ResetVisited()

@@ -123,7 +123,10 @@ public:
 	};
 	Mode mode = MAIN_MENU;
 	bool showNodes = false;
-	vector<ivec2>checkpoints;
+
+	vector<GraphNode*>checkpoints;
+	vector<GraphNode*>path;
+	
 	vector<ivec2>spawnPoints;
 	vector <Car> cars;
 	
@@ -284,7 +287,29 @@ public:
 
 			for (auto checkpoint : checkpoints)
 			{
-				nodeDotSprite.position = checkpoint;
+				nodeDotSprite.position = checkpoint->position;
+				nodeDotSprite.draw();
+			}
+
+			GraphNode * lastPathNode = nullptr;
+			for (auto pathNode : path)
+			{
+				if (lastPathNode) {
+					for (auto edge : lastPathNode->edges){
+						if (edge.end == pathNode){
+							ivec2 direction = edge.end->position - lastPathNode->position;
+							float angle = atan2(direction.y, direction.x);
+							float d = degrees(angle);
+							rightArrowSprite.setRotation(d);
+							rightArrowSprite.position = lastPathNode->position + direction / 2;
+							rightArrowSprite.draw();
+						}
+					}
+				}
+
+				lastPathNode = pathNode;
+
+				nodeDotSprite.position = pathNode->position;
 				nodeDotSprite.draw();
 			}
 			cursor16x16Sprite.position = cursorPos * NODE_SIZE;
@@ -641,8 +666,16 @@ public:
 					cursorPos.x++;
 					break;
 				case GLFW_KEY_C:
-					checkpoints.push_back(cursorPos  *  NODE_SIZE + NODE_SIZE / 2);
+				{
+					GraphNode * node = graph.GetNodeAtPosition(cursorPos  *  NODE_SIZE + NODE_SIZE / 2);
+					if (node) {
+						checkpoints.push_back(node);
+						if (checkpoints.size() >= 2){
+							path = graph.AStar(checkpoints[checkpoints.size() - 2], checkpoints[checkpoints.size() - 1]);
+						}
+					}
 					break;
+				}
 				case GLFW_KEY_N:
 					showNodes = !showNodes;
 					break;
