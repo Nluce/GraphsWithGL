@@ -129,6 +129,20 @@ public:
 	
 	vector<ivec2>spawnPoints;
 	vector <Car> cars;
+
+
+	void spawnCars()
+	{
+		for (auto spawnPoint : spawnPoints)
+		{
+			Car car;
+			car.city = this;
+			car.currentCheckpoint = 0;
+			car.currentPathNode = 0;
+			car.position = spawnPoint;
+			cars.push_back(car);
+		}
+	}
 	
 	static NodeCity * theCity;
 
@@ -556,11 +570,7 @@ public:
 
 	void startRunMode()
 	{
-		for (auto spawnPoint : spawnPoints)
-		{
-			//cars.push_back(Car(spawnPoint));
-
-		}
+		spawnCars();
 	}
 
 	void keyEvent(int key, int scancode, int action, int mods)
