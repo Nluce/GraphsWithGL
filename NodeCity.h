@@ -123,6 +123,7 @@ public:
 	};
 	Mode mode = MAIN_MENU;
 	bool showNodes = false;
+	bool showCheckPoints = false;
 
 	vector<GraphNode*>checkpoints;
 	vector<GraphNode*>path;
@@ -336,6 +337,16 @@ public:
 		}
 
 		if (mode == RUN_MODE){
+
+			if (showCheckPoints)
+			{
+				for (auto checkpoint : checkpoints)
+				{
+					nodeDotSprite.position = checkpoint->position;
+					nodeDotSprite.draw();
+				}
+			}
+
 			// move and draw the cars
 			for (Car & car : cars)
 			{
@@ -714,8 +725,8 @@ public:
 			case RUN_MODE:
 				switch (key)
 				{
-				case GLFW_KEY_N:
-					showNodes = !showNodes;
+				case GLFW_KEY_C:
+					showCheckPoints = !showCheckPoints;
 					break;
 				}
 			}
