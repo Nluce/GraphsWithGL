@@ -334,6 +334,19 @@ public:
 			cursorSprite.position = cursorPos * TILE_SIZE;
 			cursorSprite.draw();
 		}
+
+		if (mode == RUN_MODE){
+			// move and draw the cars
+			for (Car & car : cars)
+			{
+				car.move();
+				redcarSprite.position = car.position;
+				float angle = atan2(car.direction.y, car.direction.x);
+				float d = degrees(angle);
+				redcarSprite.setRotation(d);
+				redcarSprite.draw();
+			}
+		}
 	}
 
 	bool isOnMap(int x, int y){
