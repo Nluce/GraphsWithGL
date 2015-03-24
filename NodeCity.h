@@ -531,6 +531,7 @@ public:
 			cout << "Arrow Keys = Move Cursor" << endl;
 			cout << "N = Show/hide nodes" << endl;
 			cout << "S = Create Spawn point" << endl;
+			cout << "C = Create Checkpoint" << endl;
 			cout << "ESC = Return to Main Menu" << endl;
 			break;
 		case RUN_MODE:

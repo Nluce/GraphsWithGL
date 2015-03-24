@@ -115,6 +115,20 @@ public:
 	}
 
 
+	GraphNode * GetNodeWithLowestFScore()
+	{
+		GraphNode * out = nullptr;
+		for (auto node : nodes){
+			if (node->inOpenSet){
+				if (out == nullptr || node->fScore < out->fScore){
+					out = node;
+				}
+			}
+		}
+		return out;
+	}
+
+
 	vector<GraphNode *> AStar(GraphNode * start, GraphNode * goal)
 	{
 		vector<GraphNode *> out;
@@ -133,13 +147,14 @@ public:
 		start->cameFrom = start;
 		start->gScore = 0;
 		start->fScore = start->gScore + start->distanceTo(goal->position);
+		start->inOpenSet = true;
 
 
-		while (!queue.empty())
+		while (GetNodeWithLowestFScore())
 		{
-			auto first = queue.begin();
-			GraphNode * current = *first;
-			queue.erase(first);
+			GraphNode * current = GetNodeWithLowestFScore();
+			current->inOpenSet = false;
+
 			if (current == goal)
 			{
 				do{
@@ -148,7 +163,7 @@ public:
 				} while (current != start);
 				out.push_back(current);
 
-				// build the path from the cameFrom variable
+				// the path is in the wrong order so we have to reverse it
 				return ReverseOrder(out);
 			}
 			current->inClosedSet = true;
@@ -171,12 +186,9 @@ public:
 						neighbor->fScore = neighbor->gScore + neighbor->distanceTo(goal->position);
 						queue.insert(neighbor);
 						neighbor->inOpenSet = true;
-
 					}
 				}
-
 			}
-
 		}
 
 		return out;
