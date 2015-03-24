@@ -712,7 +712,12 @@ public:
 				cursorPos = clamp(cursorPos, ivec2(0, 0), ivec2(widthInTiles * 2 - 1, heightInTiles * 2 - 1));
 				break;
 			case RUN_MODE:
-				break;
+				switch (key)
+				{
+				case GLFW_KEY_N:
+					showNodes = !showNodes;
+					break;
+				}
 			}
 
 
