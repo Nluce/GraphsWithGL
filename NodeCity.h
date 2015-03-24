@@ -574,6 +574,7 @@ public:
 			break;
 		case RUN_MODE:
 			cout << "Run Mode:" << endl;
+			cout << "C = Show checkpoints" << endl;
 			cout << "ESC = Return to Main Menu" << endl;
 			break;
 		}
