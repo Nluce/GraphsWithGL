@@ -12,11 +12,12 @@ public:
 	Graph();
 	Graph(int a_uiNodeCount)
 	{
-		for (int i = 0; i < a_uiNodeCount; i++){
+		for (int i = 0; i < a_uiNodeCount; i++)
+		{
 			GraphNode* node = new GraphNode(i);
 			AddNode(node);
 		}
-
+		//whats this
 		for (int i = 0; i < a_uiNodeCount; i++){
 			GraphNode* node1 = nodes[i];
 			for (int k = 0; k < 2; k++){
@@ -45,6 +46,7 @@ public:
 	}
 
 	void RemoveNode(GraphNode* nodeToRemove)
+		//help with this
 	{
 		if (nodeToRemove == nullptr)
 		{
@@ -77,7 +79,8 @@ public:
 
 	GraphNode* FindClosestNode(glm::ivec2 position) const
 	{
-		float closestDistance = 1000000;
+		//help with this
+		float closestDistance = FLT_MAX;
 		GraphNode * closestNode = nullptr;
 		for (auto node : nodes)
 		{
@@ -93,6 +96,7 @@ public:
 
 	GraphNode* GetNodeAtPosition(glm::ivec2 position) const
 	{
+		//Returns node at a position
 		for (auto node : nodes){
 			if (node->position == position) {
 				return node;
@@ -103,6 +107,7 @@ public:
 	}
 
 	vector<GraphNode *> ReverseOrder(vector<GraphNode *> in)
+		//Flip order of nodes
 	{
 		auto size = in.size();
 		vector<GraphNode *> out;
@@ -117,6 +122,7 @@ public:
 
 	GraphNode * GetNodeWithLowestFScore()
 	{
+		//halp
 		GraphNode * out = nullptr;
 		for (auto node : nodes){
 			if (node->inOpenSet){
@@ -135,14 +141,15 @@ public:
 
 		set<GraphNode *> queue;
 
-		for (auto node : nodes){
+		for (auto node : nodes)
+		{
 			node->cameFrom = nullptr;
 			node->gScore = INFINITY;
 			node->fScore = INFINITY;
 			node->inClosedSet = false;
 			node->inOpenSet = false;
 		}
-
+		//help
 		queue.insert(start);
 		start->cameFrom = start;
 		start->gScore = 0;
