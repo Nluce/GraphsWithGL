@@ -131,7 +131,7 @@ public:
 	vector<ivec2>spawnPoints;
 	vector <Car> cars;
 
-
+	//Add a car at every spawn point.
 	void spawnCars()
 	{
 		for (auto spawnPoint : spawnPoints)
@@ -148,7 +148,7 @@ public:
 	static NodeCity * theCity;
 
 	const char * FILE_NAME = "NodeCity.txt";
-
+	//this gets called whenever the user hits a key.
 	static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 	{
 		theCity->keyEvent(key, scancode, action, mods);
@@ -166,7 +166,7 @@ public:
 		buildNodes();
 		showMenu();
 	}
-
+	//This gets a sprite for a tile number.
 	Sprite * getSpriteForTile(int tileNumber)
 	{
 		switch (tileNumber)
@@ -228,7 +228,7 @@ public:
 	}
 
 	
-
+	//saves the map to a file given by the file name
 	void save(const char * fileName)
 	{
 		ofstream out = ofstream(fileName);
@@ -243,7 +243,7 @@ public:
 
 		out.close();
 	}
-
+	// loads the map from the file.
 	void load(const char * fileName)
 	{
 		ifstream in = ifstream(fileName);
@@ -258,11 +258,11 @@ public:
 
 		in.close();
 	}
-
+	//draws all objects in the nodecity.
 	void draw()
 	{
 		static const ivec2 TILE_CENTER(TILE_SIZE / 2);
-
+		//draw all tiles.
 		for (int y = 0; y < heightInTiles; y++) {
 			for (int x = 0; x < widthInTiles; x++) {
 				int tileNumber = tiles[x][y];
@@ -281,6 +281,7 @@ public:
 		{
 			if (showNodes)
 			{
+				//this draws all the nodes
 				for (auto node : graph.nodes){
 					nodeDotSprite.position = node->position;
 					nodeDotSprite.draw();
@@ -294,18 +295,19 @@ public:
 					}
 				}
 			}
+			//draw spawn points
 			for (auto spawnPoint : spawnPoints)
 			{
 				redcarSprite.position = spawnPoint;
 				redcarSprite.draw();
 			}
-
+			//draw checkpoints
 			for (auto checkpoint : checkpoints)
 			{
 				nodeDotSprite.position = checkpoint->position;
 				nodeDotSprite.draw();
 			}
-
+			//draw path found between checkpoints
 			GraphNode * lastPathNode = nullptr;
 			for (auto pathNode : path)
 			{
@@ -330,12 +332,12 @@ public:
 			cursor16x16Sprite.position = cursorPos * NODE_SIZE;
 			cursor16x16Sprite.draw();
 		}
-
+		//draw map cursor when in the map editor.
 		if (mode == MAP_EDITOR){
 			cursorSprite.position = cursorPos * TILE_SIZE;
 			cursorSprite.draw();
 		}
-
+		//draw checkpoints in run mode if showCheckPoints is true
 		if (mode == RUN_MODE){
 
 			if (showCheckPoints)
@@ -359,11 +361,12 @@ public:
 			}
 		}
 	}
-
-	bool isOnMap(int x, int y){
+	//returns true if x,y position is on the map.
+	bool isOnMap(int x, int y)
+	{
 		return x >= 0 && x < widthInTiles && y >= 0 && y < heightInTiles;
 	}
-
+	//gets tile number at a x,y position
 	int getTileNumber(int x, int y)
 	{
 		if (isOnMap(x, y)){
@@ -371,13 +374,13 @@ public:
 		}
 		return 0;
 	}
-
+	//returns true if a road is at a x,y position
 	bool isRoad(int x, int y)
 	{
 		int t = getTileNumber(x, y);
 		return t >= 1 && t <= 16;
 	}
-
+	// correctly changes a road according if there are adjectent roads
 	void fixRoad(int x, int y){
 		if (isRoad(x, y)) {
 			int tileNumber = 1;
@@ -392,7 +395,7 @@ public:
 			tiles[x][y] = tileNumber;
 		}
 	}
-
+	//fixes roads on curent tile and adjecent tile
 	void fixRoads()
 	{
 		int x = cursorPos.x;
@@ -404,13 +407,13 @@ public:
 		fixRoad(x - 1, y);
 		buildNodes();
 	}
-
+	//set tile on cursor position
 	void setTile(int tileNumber)
 	{
 		tiles[cursorPos.x][cursorPos.y] = tileNumber;
 		fixRoads();
 	}
-
+	//controls cost for all tiles
 	float getCostForTile(int tileNumber)
 	{
 		float cost;
@@ -452,7 +455,7 @@ public:
 		}
 		return cost;
 	}
-
+	//go though all the tiles and build them if they are not a null pointer.
 	void buildNodes()
 	{
 		int nodeNumber = 0;
@@ -539,6 +542,7 @@ public:
 		}
 	}
 
+	//console command UI
 	void showMenu()
 	{
 		cout << endl;
@@ -579,7 +583,7 @@ public:
 			break;
 		}
 	}
-
+	//sets cursor position for new mode
 	void switchMode(Mode newMode){
 		if (mode != newMode){
 			if (mode == NODE_EDITOR){
@@ -592,12 +596,12 @@ public:
 			showMenu();
 		}
 	}
-
+	//spawns all cars for run mode
 	void startRunMode()
 	{
 		spawnCars();
 	}
-
+	//functions for all input commands for all modes
 	void keyEvent(int key, int scancode, int action, int mods)
 	{
 		if (action == GLFW_PRESS){

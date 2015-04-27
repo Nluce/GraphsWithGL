@@ -5,19 +5,28 @@
 #include <set>
 #include <glm/glm.hpp>
 
+// This class repersents the entrie graph, It holds a list of all the nodes
+// This class has methods for adding and removing nodes.
+// It has A* path search
+// It has methods for searching for nodes.
+// It has depth first search
+
+
 class Graph
 {
 	typedef std::vector<GraphNode*> NodeList;
 public:
 	Graph();
+	//This constructor was for testing. It creates a set ammount of randomly connected nodes.
 	Graph(int a_uiNodeCount)
 	{
+		//add blank nodes to the graph
 		for (int i = 0; i < a_uiNodeCount; i++)
 		{
 			GraphNode* node = new GraphNode(i);
 			AddNode(node);
 		}
-		//whats this
+		//This connects random nodes
 		for (int i = 0; i < a_uiNodeCount; i++){
 			GraphNode* node1 = nodes[i];
 			for (int k = 0; k < 2; k++){
@@ -35,9 +44,11 @@ public:
 	}
 	~Graph();
 public:
+	//This is the list that holds the nodes.
 	NodeList nodes;
 
 public:
+	//This adds a node to the end of the list.
 	void AddNode(GraphNode* node)
 	{
 		if (node != nullptr){
@@ -45,13 +56,14 @@ public:
 		}
 	}
 
+	//This Removes a node. also removes any connected edges.
 	void RemoveNode(GraphNode* nodeToRemove)
-		//help with this
 	{
 		if (nodeToRemove == nullptr)
 		{
 			return;
 		}
+		//search all the nodes looking for connected edges.
 		for (int i = 0; i < nodes.size(); i++)
 		{
 			GraphNode * node = nodes[i];
@@ -68,6 +80,7 @@ public:
 					j--;  
 				}
 			}
+			//remove the actuall node from the node list.
 			if (node == nodeToRemove)
 			{
 				nodes.erase(nodes.begin() + i);
@@ -77,9 +90,9 @@ public:
 		}
 	}
 
+	//Find the node closest to a position
 	GraphNode* FindClosestNode(glm::ivec2 position) const
 	{
-		//help with this
 		float closestDistance = FLT_MAX;
 		GraphNode * closestNode = nullptr;
 		for (auto node : nodes)
@@ -105,9 +118,9 @@ public:
 
 		return nullptr;
 	}
-
+	//Flip order of nodes
 	vector<GraphNode *> ReverseOrder(vector<GraphNode *> in)
-		//Flip order of nodes
+		
 	{
 		auto size = in.size();
 		vector<GraphNode *> out;
@@ -119,10 +132,9 @@ public:
 		return out;
 	}
 
-
+	//This is used by the searching algorythm
 	GraphNode * GetNodeWithLowestFScore()
 	{
-		//halp
 		GraphNode * out = nullptr;
 		for (auto node : nodes){
 			if (node->inOpenSet){
@@ -134,13 +146,18 @@ public:
 		return out;
 	}
 
-
+	//This is the A* searching algorythm
+	//It tries to find the shortest path between the start and the goal.
+	//It determens what node to search first by calculating the nodes distance to the goal.
+	//start: This is the node to start from.
+	//Goal: This is the node to attempt to find a path to.
+	//Returns: the path from start to goal as a vector of nodes.d
 	vector<GraphNode *> AStar(GraphNode * start, GraphNode * goal)
 	{
 		vector<GraphNode *> out;
 
 		set<GraphNode *> queue;
-
+		//reset all the scores on all the nodes
 		for (auto node : nodes)
 		{
 			node->cameFrom = nullptr;
@@ -149,39 +166,44 @@ public:
 			node->inClosedSet = false;
 			node->inOpenSet = false;
 		}
-		//help
+		//this sets up the scores on the start nodes.
 		queue.insert(start);
 		start->cameFrom = start;
 		start->gScore = 0;
 		start->fScore = start->gScore + start->distanceTo(goal->position);
 		start->inOpenSet = true;
 
-
+		//loop until we find a path or fail.
 		while (GetNodeWithLowestFScore())
 		{
 			GraphNode * current = GetNodeWithLowestFScore();
 			current->inOpenSet = false;
-
+			//check to see if we made it to the goal.
 			if (current == goal)
 			{
+				//working backwards towards the start, adding each node to the output
 				do{
 					out.push_back(current);
 					current = current->cameFrom;
-				} while (current != start);
+				}
+				while (current != start);
 				out.push_back(current);
 
 				// the path is in the wrong order so we have to reverse it
 				return ReverseOrder(out);
 			}
+			//we did not make it to the goal, so we keep searching for a path.
 			current->inClosedSet = true;
+			//search each edge
 			for (auto edge : current->edges)
 			{
 				auto neighbor = edge.end;
+				//Don't search nodes we already searched.
 				if (!neighbor->inClosedSet)
 				{
 					float newScore = current->gScore + edge.cost;
 
-
+					//If current path is better than previous path, then remove old path.
 					if (newScore < neighbor->gScore){
 						if (neighbor->inOpenSet){
 							auto f = queue.find(neighbor);
@@ -200,14 +222,15 @@ public:
 
 		return out;
 	}
-
+	// This resets the visited flag on all the nodes.
+	// This is used for the searchDFS routine
 	void ResetVisited()
 	{
 		for (auto node : nodes){
 			node->visited = false;
 		}
 	}
-
+	//does a simple depth first search to find a path.
 	bool SearchDFS(GraphNode* start, GraphNode* end)
 	{
 		if (start == nullptr || end == nullptr)
@@ -215,7 +238,7 @@ public:
 			return false;
 		}
 		ResetVisited();
-
+		
 		std::stack<GraphNode*> nodeStack;
 		nodeStack.push(start);
 		while (!nodeStack.empty())
@@ -243,7 +266,7 @@ public:
 		//return false if we didn't find a_pEnd
 		return false;
 	}
-
+	//Returns number of links between two nodes.
 	int HowManyLinksBetween(GraphNode* start, GraphNode* end)
 	{
 		if (start == nullptr || end == nullptr)
@@ -286,7 +309,7 @@ public:
 		//return -1 if we cant find a path
 		return -1;
 	}
-
+	//add edges between two nodes.
 	void ConnectNodes(GraphNode* nodeA, GraphNode* nodeB, float cost)
 	{
 		if (nodeA == nullptr || nodeB == nullptr) {
