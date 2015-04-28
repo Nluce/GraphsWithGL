@@ -151,7 +151,7 @@ public:
 	//It determens what node to search first by calculating the nodes distance to the goal.
 	//start: This is the node to start from.
 	//Goal: This is the node to attempt to find a path to.
-	//Returns: the path from start to goal as a vector of nodes.d
+	//Returns: the path from start to goal as a vector of nodes.
 	vector<GraphNode *> AStar(GraphNode * start, GraphNode * goal)
 	{
 		vector<GraphNode *> out;

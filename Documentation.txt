@@ -1,0 +1,11 @@
+My graph class has functions for handling nodes,
+it has built in A* searching.
+It also has Depth First Search.
+It can also get a node at a position.
+
+The node city simulation uses 4 nodes per tile to simulate a real road.
+You can set 2 nodes as checkpoints, then use car spawn points to spawn cars that will use A* to pathfind back and forth
+between the checkpoints.
+
+Node city's tile editor is real time. The nodes and tiles will update appropriatly to any changes.
+It saves and loads from a file. 

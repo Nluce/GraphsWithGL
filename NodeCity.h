@@ -246,7 +246,7 @@ public:
 	// loads the map from the file.
 	void load(const char * fileName)
 	{
-		ifstream in = ifstream(fileName);
+		ifstream in = ifstream(fileName);          
 
 		for (int y = 0; y < heightInTiles; y++) {
 			for (int x = 0; x < widthInTiles; x++) {
